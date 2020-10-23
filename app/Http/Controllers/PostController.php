@@ -2,30 +2,21 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\Post as PostResource;
+use App\Http\Resources\PostCollection;
 use App\Post;
-use Illuminate\Http\Request;
 
 class PostController extends Controller
 {
-    public function store() {
+    public function index()
+    {
+       return new PostCollection(Post::all()); 
+    }
 
-        $data = request()->validate([
-            'data.attributes.body' => '',
-        ]);
-
+    public function store()
+    {
+        $data = request()->validate(['data.attributes.body' => '']);
         $post = request()->user()->posts()->create($data['data']['attributes']);
-
-        return response([
-            'data' => [
-                'type' => 'posts',
-                'post_id' => $post->id,
-                'attributes' => [
-                    'body' => $post->body,
-                ]
-            ],
-            'links' => [
-                'self' => url('/posts/'.$post->id)
-            ]
-        ], 201);
+        return new PostResource($post);
     }
 }
