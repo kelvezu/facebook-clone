@@ -15,25 +15,13 @@ class RetrievePostsTest extends TestCase
     public function test_a_user_can_retrieve_post(){
         $this->withoutExceptionHandling();
         $this->actingAs($user = factory(User::class)->create(), 'api');
-        $post = factory(Post::class, 2)->create();
+        $post = factory(Post::class, 2)->create(['user_id' => $user->id]);
 
         $response = $this->get('/api/posts');
 
         $response->assertOk()
             ->assertJson([
                 'data' => [
-                    [
-                        'data' => [
-                            'type' => 'posts',
-                            'post_id' => $post->first()->id,
-                            'attributes' => [
-                                'body' => $post->first()->body,
-                            ]
-                        ],
-                        'links' => [
-                            'self' => url('/posts/'.$post->first()->id)
-                        ],
-                    ],
                     [
                         'data' => [
                             'type' => 'posts',
@@ -45,6 +33,18 @@ class RetrievePostsTest extends TestCase
                         'links' => [
                             'self' => url('/posts/'.$post->last()->id)
                         ],
+                    ],
+                    [
+                        'data' => [
+                            'type' => 'posts',
+                            'post_id' => $post->first()->id,
+                            'attributes' => [
+                                'body' => $post->first()->body,
+                            ]
+                        ],
+                        'links' => [
+                            'self' => url('/posts/'.$post->first()->id)
+                        ],
                     ]
                 ],
                 'links' => [
@@ -52,5 +52,22 @@ class RetrievePostsTest extends TestCase
                 ]
             ]);
 
+    }
+
+    public function test_a_user_can_only_retrieve_their_post()
+    {
+        $this->withoutExceptionHandling();
+        $this->actingAs($user = factory(User::class)->create(), 'api');
+        $post = factory(Post::class)->create();
+
+        $response = $this->get('/api/posts');
+
+        $response->assertOk()
+            ->assertExactJson([
+                'data' => [],
+                'links' => [
+                    'self' => url('/posts')
+                ]
+            ]);
     }
 }
