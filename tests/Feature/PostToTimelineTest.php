@@ -15,10 +15,8 @@ class PostToTimelineTest extends TestCase
     public function test_a_user_can_post_a_text_post()
     {
         $this->withoutExceptionHandling();
-        
         $this->actingAs($user = factory(User::class)->create(), 'api');
-
-        $response = $this->post('/api/posts', [
+        $response = $this->post('/api/posts',[
             'data' => [
                 'type' => 'posts',
                 'attributes' => [
@@ -28,6 +26,21 @@ class PostToTimelineTest extends TestCase
         ]);
 
         $post = Post::first();
+        $this->assertCount(1, Post::all());
+        $this->assertEquals($user->id, $post->user_id);
+        $this->assertEquals('Testing Body', $post->body);
         $response->assertStatus(201);
+        $response->assertJson([
+            'data' => [
+                'type' => 'posts',
+                'post_id' => $post->id,
+                'attributes' => [
+                    'body' => 'Testing Body',
+                ]
+            ],
+            'links' => [
+                'self' => url('/posts/'.$post->id)
+            ]
+        ]);
     }
 }
