@@ -10,7 +10,7 @@
                     <p class="text-sm font-semibold">{{ post.data.attributes.posted_by.data.attributes.name }}</p>
                 </div>
                 <div class="mt-0">
-                    <p class="text-xs text-gray-600">5 mins</p>
+                    <p class="text-xs text-gray-600">{{ post.data.attributes.posted_at }}</p>
                     </div>
             </div>
         </div>
@@ -19,8 +19,8 @@
         </div>
     </div>
 
-    <div class="w-full">
-        <img class="w-full" src="https://c4.wallpaperflare.com/wallpaper/108/140/869/digital-digital-art-artwork-fantasy-art-drawing-hd-wallpaper-preview.jpg" alt="post picture">
+    <div v-if="post.data.attributes.image" class="w-full">
+        <img class="w-full" :src="post.data.attributes.image">
     </div>
 
     <div class="px-4 pt-2 flex justify-between">

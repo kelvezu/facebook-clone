@@ -38111,7 +38111,11 @@ var render = function() {
               ])
             ]),
             _vm._v(" "),
-            _vm._m(1)
+            _c("div", { staticClass: "mt-0" }, [
+              _c("p", { staticClass: "text-xs text-gray-600" }, [
+                _vm._v(_vm._s(_vm.post.data.attributes.posted_at))
+              ])
+            ])
           ])
         ]),
         _vm._v(" "),
@@ -38120,7 +38124,14 @@ var render = function() {
         ])
       ]),
       _vm._v(" "),
-      _vm._m(2),
+      _vm.post.data.attributes.image
+        ? _c("div", { staticClass: "w-full" }, [
+            _c("img", {
+              staticClass: "w-full",
+              attrs: { src: _vm.post.data.attributes.image }
+            })
+          ])
+        : _vm._e(),
       _vm._v(" "),
       _c("div", { staticClass: "px-4 pt-2 flex justify-between" }, [
         _c("div", { staticClass: "flex justify-center items-center" }, [
@@ -38145,7 +38156,7 @@ var render = function() {
             )
           ]),
           _vm._v(" "),
-          _vm._m(3)
+          _vm._m(1)
         ]),
         _vm._v(" "),
         _c("div", [_vm._v("13 comments")])
@@ -38231,29 +38242,6 @@ var staticRenderFns = [
           src:
             "https://world-celebs.com/public/media/celebrity/2019/07/13/0hoybydh3lax-joji-filthy-frank.jpg",
           alt: "profile pic"
-        }
-      })
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "mt-0" }, [
-      _c("p", { staticClass: "text-xs text-gray-600" }, [_vm._v("5 mins")])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "w-full" }, [
-      _c("img", {
-        staticClass: "w-full",
-        attrs: {
-          src:
-            "https://c4.wallpaperflare.com/wallpaper/108/140/869/digital-digital-art-artwork-fantasy-art-drawing-hd-wallpaper-preview.jpg",
-          alt: "post picture"
         }
       })
     ])
