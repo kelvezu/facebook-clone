@@ -1981,7 +1981,21 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 /* harmony default export */ __webpack_exports__["default"] = ({
-  name: 'Nav'
+  name: 'Nav',
+  data: function data() {
+    return {
+      user: null
+    };
+  },
+  mounted: function mounted() {
+    var _this = this;
+
+    axios.get('/api/auth-user').then(function (res) {
+      return _this.user = res.data;
+    })["catch"](function (err) {
+      return console.error("Could not fetched the authenticated user. Error:".concat(err));
+    });
+  }
 });
 
 /***/ }),
@@ -37977,7 +37991,12 @@ var render = function() {
             {
               staticClass:
                 "px-6 h-full border-b-2 border-white hover:border-blue-500 flex items-center",
-              attrs: { to: "/" }
+              attrs: {
+                to: {
+                  name: "user.show",
+                  params: { userId: _vm.user.data.user_id }
+                }
+              }
             },
             [
               _c("img", {

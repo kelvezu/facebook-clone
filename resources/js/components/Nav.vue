@@ -19,7 +19,7 @@
         <router-link class="px-6 h-full border-b-2 border-white hover:border-blue-500 hover:text-blue-500 flex items-center" to="/">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="fill-current w-5 h-5"><path d="M22.6 11l-9.9-9c-.4-.4-1.1-.4-1.5 0l-9.9 9c-.3.3-.5.8-.3 1.2.2.5.6.8 1.1.8h1.6v9c0 .4.3.6.6.6h5.4c.4 0 .6-.3.6-.6v-5.5h3.2V22c0 .4.3.6.6.6h5.4c.4 0 .6-.3.6-.6v-9h1.6c.5 0 .9-.3 1.1-.7.3-.5.2-1-.2-1.3zm-2.5-8h-4.3l5 4.5V3.6c0-.3-.3-.6-.7-.6z"/></svg>
         </router-link>
-         <router-link class="px-6 h-full border-b-2 border-white hover:border-blue-500 flex items-center" to="/">
+         <router-link class="px-6 h-full border-b-2 border-white hover:border-blue-500 flex items-center" :to="{name: 'user.show', params:{ userId: user.data.user_id }}">
             <img class="w-8 h-8 object-cover rounded-full" src="https://world-celebs.com/public/media/celebrity/2019/07/13/0hoybydh3lax-joji-filthy-frank.jpg" alt="profile pic">
         </router-link>
         <router-link class="px-6 h-full border-b-2 border-white hover:border-blue-500 hover:text-blue-500 flex items-center" to="/">
@@ -37,7 +37,17 @@
 
 <script>
 export default {
-    name: 'Nav'
+    name: 'Nav',
+    data() {
+        return {
+            user: null,
+        }
+    },
+    mounted(){
+        axios.get('/api/auth-user')
+            .then(res => this.user = res.data)
+            .catch(err => console.error(`Could not fetched the authenticated user. Error:${err}`));
+    },
 }
 </script>
 
