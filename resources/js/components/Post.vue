@@ -7,7 +7,7 @@
             </div>
             <div class="ml-2">
                 <div>
-                    <p class="text-sm font-semibold">{{ post.data.attributes.posted_by.data.attributes.name }}</p>
+                    <router-link :to="{name: 'user.show', params:{ userId: post.data.attributes.posted_by.data.user_id }}" class="text-sm font-semibold">{{ post.data.attributes.posted_by.data.attributes.name }}</router-link>
                 </div>
                 <div class="mt-0">
                     <p class="text-xs text-gray-600">{{ post.data.attributes.posted_at }}</p>

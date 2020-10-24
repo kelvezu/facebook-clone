@@ -2166,6 +2166,7 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _components_Post__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../components/Post */ "./resources/js/components/Post.vue");
 //
 //
 //
@@ -2176,33 +2177,55 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: 'Show',
   data: function data() {
     return {
-      users: null,
-      loading: true
+      user: null,
+      posts: null,
+      userLoading: true,
+      postLoading: true
     };
+  },
+  components: {
+    Post: _components_Post__WEBPACK_IMPORTED_MODULE_0__["default"]
   },
   mounted: function mounted() {
     var _this = this;
 
     axios.get("/api/users/".concat(this.$route.params.userId)).then(function (res) {
-      _this.users = res.data;
+      _this.user = res.data;
     })["catch"](function (err) {
       console.log("Unable to fetch the user from the server. Error:".concat(err));
     })["finally"](function () {
-      _this.loading = false;
-    }); // axios.get(`/api/users/${this.$route.params.userId}/posts`)
-    //     .then(res => {
-    //         this.users = res.data;
-    //     })
-    //     .catch(err => {
-    //         console.log(`Unable to fetch the user's posts from the server. Error:${err}`);
-    //     })
-    //     .finally(() => {
-    //         this.loading = false;
-    //     });            
+      _this.userLoading = false;
+    });
+    axios.get("/api/users/".concat(this.$route.params.userId, "/posts")).then(function (res) {
+      _this.posts = res.data;
+    })["catch"](function (err) {
+      console.log("Unable to fetch the user's posts from the server. Error:".concat(err));
+    })["finally"](function () {
+      _this.postLoading = false;
+    });
   }
 });
 
@@ -38158,15 +38181,34 @@ var render = function() {
           _vm._m(0),
           _vm._v(" "),
           _c("div", { staticClass: "ml-2" }, [
-            _c("div", [
-              _c("p", { staticClass: "text-sm font-semibold" }, [
-                _vm._v(
-                  _vm._s(
-                    _vm.post.data.attributes.posted_by.data.attributes.name
-                  )
+            _c(
+              "div",
+              [
+                _c(
+                  "router-link",
+                  {
+                    staticClass: "text-sm font-semibold",
+                    attrs: {
+                      to: {
+                        name: "user.show",
+                        params: {
+                          userId:
+                            _vm.post.data.attributes.posted_by.data.user_id
+                        }
+                      }
+                    }
+                  },
+                  [
+                    _vm._v(
+                      _vm._s(
+                        _vm.post.data.attributes.posted_by.data.attributes.name
+                      )
+                    )
+                  ]
                 )
-              ])
-            ]),
+              ],
+              1
+            ),
             _vm._v(" "),
             _c("div", { staticClass: "mt-0" }, [
               _c("p", { staticClass: "text-xs text-gray-600" }, [
@@ -38409,26 +38451,72 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", [
-    _vm._m(0),
-    _vm._v(" "),
-    _vm.loading
-      ? _c("p", [_vm._v("Loading")])
-      : _c("h2", [_vm._v(_vm._s(_vm.users.data.attributes.name))])
-  ])
+  return _c(
+    "div",
+    { staticClass: "flex flex-col items-center" },
+    [
+      _vm.userLoading
+        ? _c("p", [_vm._v("Loading post...")])
+        : _c("div", { staticClass: "relative mb-8" }, [
+            _vm._m(0),
+            _vm._v(" "),
+            _c(
+              "div",
+              {
+                staticClass:
+                  "absolute flex items-center bottom-0 left-0 -mb-8 ml-12 z-20"
+              },
+              [
+                _vm._m(1),
+                _vm._v(" "),
+                _c("p", { staticClass: "text-2xl ml-4 text-gray-100 ml-4" }, [
+                  _vm._v(_vm._s(_vm.user.data.attributes.name))
+                ])
+              ]
+            )
+          ]),
+      _vm._v(" "),
+      _vm.postLoading
+        ? _c("p", [_vm._v("Loading post...")])
+        : _vm._l(_vm.posts.data, function(post) {
+            return _c("Post", { key: post.data.post_id, attrs: { post: post } })
+          }),
+      _vm._v(" "),
+      !_vm.postLoading && _vm.posts.data.length < 1
+        ? _c("p", [_vm._v("\r\n        No posts found! Get started.\r\n    ")])
+        : _vm._e()
+    ],
+    2
+  )
 }
 var staticRenderFns = [
   function() {
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "w-100 h-64 overflow-hidden" }, [
+    return _c("div", { staticClass: "w-full h-64 overflow-hidden z-10" }, [
       _c("img", {
         staticClass: "object-cover w-full",
         attrs: {
           src:
-            "https://c4.wallpaperflare.com/wallpaper/31/105/276/retrowave-synthwave-neon-ultrawide-wallpaper-preview.jpg",
+            "https://www.nba.com/lakers/sites/lakers/files/1920_lal_mktg_finals_final_wallpaper_jd.jpg",
           alt: "Cover photo"
+        }
+      })
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "w-32" }, [
+      _c("img", {
+        staticClass:
+          "w-32 h-32 border-4 border-gray-200 rounded-full shadow-lg object-cover rounded-full",
+        attrs: {
+          src:
+            "https://world-celebs.com/public/media/celebrity/2019/07/13/0hoybydh3lax-joji-filthy-frank.jpg",
+          alt: "profile pic"
         }
       })
     ])

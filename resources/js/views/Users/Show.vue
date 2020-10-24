@@ -1,44 +1,69 @@
 <template>
-<div>
-    <div class="w-100 h-64 overflow-hidden">
-        <img class="object-cover w-full" src="https://c4.wallpaperflare.com/wallpaper/31/105/276/retrowave-synthwave-neon-ultrawide-wallpaper-preview.jpg" alt="Cover photo">
+<div class="flex flex-col items-center">
+    <p v-if="userLoading">Loading post...</p>
+    <div v-else class="relative mb-8">
+        <div class="w-full h-64 overflow-hidden z-10">
+            <img src="https://www.nba.com/lakers/sites/lakers/files/1920_lal_mktg_finals_final_wallpaper_jd.jpg" alt="Cover photo" class="object-cover w-full">
+        </div>
+
+        <div class="absolute flex items-center bottom-0 left-0 -mb-8 ml-12 z-20">
+            <div class="w-32">
+                 <img class="w-32 h-32 border-4 border-gray-200 rounded-full shadow-lg object-cover rounded-full" src="https://world-celebs.com/public/media/celebrity/2019/07/13/0hoybydh3lax-joji-filthy-frank.jpg" alt="profile pic">
+            </div>  
+
+            <p class="text-2xl ml-4 text-gray-100 ml-4">{{ user.data.attributes.name }}</p>
+        </div>
     </div>
-    <p v-if="loading">Loading</p>
-    <h2 v-else>{{ users.data.attributes.name }}</h2>
+
+    <p v-if="postLoading">Loading post...</p>
+
+    <Post v-else v-for="post in posts.data" :key="post.data.post_id" :post="post" />
+
+    <p v-if="!postLoading && posts.data.length < 1">
+        No posts found! Get started.
+    </p>
+
 </div>
 </template>
 
 <script>
+import Post from '../../components/Post';
+
 export default {
     name: 'Show',
     data() {
         return {
-            users: null,
-            loading: true,
+            user: null,
+            posts:null,
+            userLoading: true,
+            postLoading:true
         }
+    },
+    components: {
+        Post
     },
     mounted(){
         axios.get(`/api/users/${this.$route.params.userId}`)
             .then(res => {
-                this.users = res.data;
+                this.user = res.data;
             })
             .catch(err => {
                 console.log(`Unable to fetch the user from the server. Error:${err}`);
             })
             .finally(() => {
-                this.loading = false;
+                this.userLoading = false;
             });
 
-        // axios.get(`/api/users/${this.$route.params.userId}/posts`)
-        //     .then(res => {
-        //         this.users = res.data;
-        //     })
-        //     .catch(err => {
-        //         console.log(`Unable to fetch the user's posts from the server. Error:${err}`);
-        //     })
-        //     .finally(() => {
-        //         this.loading = false;
-        //     });            
+        axios.get(`/api/users/${this.$route.params.userId}/posts`)
+            .then(res => {
+                this.posts = res.data;
+            })
+            .catch(err => {
+                console.log(`Unable to fetch the user's posts from the server. Error:${err}`);
+            })
+            .finally(() => {
+                this.postLoading = false;
+            });            
     }
 }
 </script>
