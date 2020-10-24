@@ -44,7 +44,7 @@ class PostToTimelineTest extends TestCase
                             ]
                         ],
                         'links' => [
-                            'self' => url('/user/'.$user->id)
+                            'self' => url('/users/'.$user->id)
                         ]
                         
                     ],
