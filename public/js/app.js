@@ -2175,6 +2175,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: 'Show',
   data: function data() {
@@ -2192,14 +2193,16 @@ __webpack_require__.r(__webpack_exports__);
       console.log("Unable to fetch the user from the server. Error:".concat(err));
     })["finally"](function () {
       _this.loading = false;
-    });
-    axios.get("/api/posts/".concat(this.$route.params.userId)).then(function (res) {
-      _this.users = res.data;
-    })["catch"](function (err) {
-      console.log("Unable to fetch the user from the server. Error:".concat(err));
-    })["finally"](function () {
-      _this.loading = false;
-    });
+    }); // axios.get(`/api/users/${this.$route.params.userId}/posts`)
+    //     .then(res => {
+    //         this.users = res.data;
+    //     })
+    //     .catch(err => {
+    //         console.log(`Unable to fetch the user's posts from the server. Error:${err}`);
+    //     })
+    //     .finally(() => {
+    //         this.loading = false;
+    //     });            
   }
 });
 
@@ -38409,7 +38412,9 @@ var render = function() {
   return _c("div", [
     _vm._m(0),
     _vm._v(" "),
-    _c("h2", [_vm._v(_vm._s(_vm.users.data.attributes.name))])
+    _vm.loading
+      ? _c("p", [_vm._v("Loading")])
+      : _c("h2", [_vm._v(_vm._s(_vm.users.data.attributes.name))])
   ])
 }
 var staticRenderFns = [
