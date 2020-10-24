@@ -2080,7 +2080,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 /* harmony default export */ __webpack_exports__["default"] = ({
-  name: 'Post'
+  name: 'Post',
+  props: ['post']
 });
 
 /***/ }),
@@ -2131,6 +2132,20 @@ __webpack_require__.r(__webpack_exports__);
   components: {
     NewPost: _components_NewPost__WEBPACK_IMPORTED_MODULE_0__["default"],
     Post: _components_Post__WEBPACK_IMPORTED_MODULE_1__["default"]
+  },
+  data: function data() {
+    return {
+      posts: null
+    };
+  },
+  mounted: function mounted() {
+    var _this = this;
+
+    axios.get('/api/posts').then(function (res) {
+      _this.posts = res.data;
+    })["catch"](function (err) {
+      return console.log(err);
+    });
   }
 });
 
@@ -38081,9 +38096,31 @@ var render = function() {
     "div",
     { staticClass: "bg-white rounded shadow w-2/3 mt-3 overflow-hidden" },
     [
-      _vm._m(0),
+      _c("div", { staticClass: "flex flex-col p-4" }, [
+        _c("div", { staticClass: "flex items-center" }, [
+          _vm._m(0),
+          _vm._v(" "),
+          _c("div", { staticClass: "ml-2" }, [
+            _c("div", [
+              _c("p", { staticClass: "text-sm font-semibold" }, [
+                _vm._v(
+                  _vm._s(
+                    _vm.post.data.attributes.posted_by.data.attributes.name
+                  )
+                )
+              ])
+            ]),
+            _vm._v(" "),
+            _vm._m(1)
+          ])
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "mt-3" }, [
+          _c("p", [_vm._v(" " + _vm._s(_vm.post.data.attributes.body) + " ")])
+        ])
+      ]),
       _vm._v(" "),
-      _vm._m(1),
+      _vm._m(2),
       _vm._v(" "),
       _c("div", { staticClass: "px-4 pt-2 flex justify-between" }, [
         _c("div", { staticClass: "flex justify-center items-center" }, [
@@ -38108,7 +38145,7 @@ var render = function() {
             )
           ]),
           _vm._v(" "),
-          _vm._m(2)
+          _vm._m(3)
         ]),
         _vm._v(" "),
         _c("div", [_vm._v("13 comments")])
@@ -38187,37 +38224,23 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "flex flex-col p-4" }, [
-      _c("div", { staticClass: "flex items-center" }, [
-        _c("div", [
-          _c("img", {
-            staticClass: "w-8 h-8 object-cover rounded-full",
-            attrs: {
-              src:
-                "https://world-celebs.com/public/media/celebrity/2019/07/13/0hoybydh3lax-joji-filthy-frank.jpg",
-              alt: "profile pic"
-            }
-          })
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "ml-2" }, [
-          _c("div", [
-            _c("p", { staticClass: "text-sm font-semibold" }, [
-              _vm._v("Mon Cunanan")
-            ])
-          ]),
-          _vm._v(" "),
-          _c("div", { staticClass: "mt-0" }, [
-            _c("p", { staticClass: "text-xs text-gray-600" }, [
-              _vm._v("5 mins")
-            ])
-          ])
-        ])
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "mt-3" }, [
-        _c("p", [_vm._v(" Im a lazy coder. ")])
-      ])
+    return _c("div", [
+      _c("img", {
+        staticClass: "w-8 h-8 object-cover rounded-full",
+        attrs: {
+          src:
+            "https://world-celebs.com/public/media/celebrity/2019/07/13/0hoybydh3lax-joji-filthy-frank.jpg",
+          alt: "profile pic"
+        }
+      })
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "mt-0" }, [
+      _c("p", { staticClass: "text-xs text-gray-600" }, [_vm._v("5 mins")])
     ])
   },
   function() {
@@ -38307,8 +38330,14 @@ var render = function() {
   return _c(
     "div",
     { staticClass: "flex flex-col items-center py-4" },
-    [_c("NewPost"), _vm._v(" "), _c("Post")],
-    1
+    [
+      _c("NewPost"),
+      _vm._v(" "),
+      _vm._l(_vm.posts.data, function(post) {
+        return _c("Post", { key: post.data.post_id, attrs: { post: post } })
+      })
+    ],
+    2
   )
 }
 var staticRenderFns = []

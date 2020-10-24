@@ -7,7 +7,7 @@
             </div>
             <div class="ml-2">
                 <div>
-                    <p class="text-sm font-semibold">Mon Cunanan</p>
+                    <p class="text-sm font-semibold">{{ post.data.attributes.posted_by.data.attributes.name }}</p>
                 </div>
                 <div class="mt-0">
                     <p class="text-xs text-gray-600">5 mins</p>
@@ -15,7 +15,7 @@
             </div>
         </div>
         <div class="mt-3">
-            <p> Im a lazy coder. </p>
+            <p> {{ post.data.attributes.body }} </p>
         </div>
     </div>
 
@@ -50,7 +50,10 @@
 
 <script>
 export default {
-    name: 'Post'
+    name: 'Post',
+    props: [
+        'post',
+    ]
 }
 </script>
 
