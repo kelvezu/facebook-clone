@@ -23,11 +23,20 @@ export default {
     },
     methods: {
         ...mapActions([
-            'fetchAuthUser'
+            'fetchAuthUser',
+            'setPageTitle'
         ])
     },
     mounted() {
         this.fetchAuthUser();
+    },
+    created() {
+        this.setPageTitle(this.$route.meta.title);
+    },
+    watch: {
+        $route(to,from){
+            this.setPageTitle(to.meta.title);
+        }   
     }
 };
 </script>
