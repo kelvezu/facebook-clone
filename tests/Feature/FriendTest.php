@@ -106,4 +106,68 @@ class FriendTest extends TestCase
         'links' => ['self' => url('/users/'.$another_user->id)]
     ]);
   }
+
+  /**
+   * Note: Dont add the $this->withoutExceptionHandling(); if you are asserting an error.
+   */
+  public function test_only_valid_friend_request_can_be_accepted()
+  {
+    // $this->withoutExceptionHandling();
+
+    $another_user = factory(User::class)->create();
+
+    $response = $this->actingAs($another_user,'api')
+        ->post('/api/friend-request-response',[
+            'user_id' => 112,
+            'status' => 1,
+        ])
+        ->assertStatus(404);
+
+    $friendRequest = Friend::first();
+    $this->assertNull($friendRequest);
+
+    $response->assertJson([
+        'errors' => [
+            'code' => '404' ,
+            'title' => 'Friend request not found!',
+            'detail' => 'Unable to request the friend request with the given information.'
+        ]   
+    ]);
+  }
+
+  public function test_only_the_recipient_can_accept_the_friend_request()
+  {
+    // $this->withoutExceptionHandling();
+
+    $this->actingAs($user = factory(User::class)->create(), 'api');
+    $another_user = factory(User::class)->create();
+
+    $this->post('/api/friend-request', [
+        'friend_id' => $another_user->id
+    ])
+    ->assertOk();
+    
+    $friendRequest = Friend::first();
+
+    $this->assertNotNull($friendRequest);
+
+    $response = $this->actingAs(factory(User::class)->create(),'api')
+    ->post('/api/friend-request-response',[
+        'user_id' => $user->id,
+        'status' => 1,
+    ])
+    ->assertNotFound();
+
+    $this->assertNull($friendRequest->confirmed_at);
+    $this->assertNull($friendRequest->status);
+    $response->assertJson([
+        'errors' => [
+            'code' => '404' ,
+            'title' => 'Friend request not found!',
+            'detail' => 'Unable to request the friend request with the given information.'
+        ]   
+    ]);
+
+
+  }
 }
