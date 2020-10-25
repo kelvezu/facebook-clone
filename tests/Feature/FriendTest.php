@@ -3,8 +3,10 @@
 namespace Tests\Feature;
 
 use App\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
+use App\Friend;
+use Carbon\Carbon;
 use Tests\TestCase;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class FriendTest extends TestCase
 {
@@ -49,7 +51,7 @@ class FriendTest extends TestCase
     ])
     ->assertStatus(404);
 
-    $friendRequest = \App\Friend::first();
+    $friendRequest = Friend::first();
     $res->assertJson([
         'errors' => [
             'code' => '404' ,
@@ -58,5 +60,42 @@ class FriendTest extends TestCase
         ]
     ]);
 
+  }
+
+  public function test_friend_request_can_be_accepted()
+  {
+    $this->withoutExceptionHandling();
+
+    $this->actingAs($user = factory(User::class)->create(), 'api');
+    $another_user = factory(User::class)->create();
+
+    $this->post('/api/friend-request', [
+        'friend_id' => $another_user->id
+    ])
+    ->assertOk();
+
+    $response = $this->actingAs($another_user,'api')
+        ->post('/api/friend-request-response',[
+            'user_id' => $user->id,
+            'status' => 1,
+        ])
+        ->assertOk();
+
+    $friendRequest = Friend::first();
+    // dd($friendRequest);
+    $this->assertNotNull($friendRequest->confirmed_at);
+    $this->assertInstanceOf(Carbon::class, $friendRequest->confirmed_at);
+    $this->assertEquals(now()->startOfSecond(), $friendRequest->confirmed_at);
+    $this->assertEquals(1, $friendRequest->status);
+    $response->assertJson([
+        'data' => [
+            'type' => 'friends',
+            'friend_request_id' => $friendRequest->id,
+            'attributes' => [
+                'confirmed_at' => $friendRequest->confirmed_at->diffForHumans()
+            ]
+        ],
+        'links' => ['self' => url('/users/'.$another_user->id)]
+    ]);
   }
 }
