@@ -61,6 +61,14 @@ class FriendTest extends TestCase
     ]);
 
   }
+  
+  /**
+   * This test will test if the user can accept the friend request.
+   *    - created a post request for friend request. Send friend request to another_user.
+   *    - then as another_user, accept the pending friend request. 
+   *    - pass the status = 1
+   *    - give the proper response after accepting the request.
+   */
 
   public function test_friend_request_can_be_accepted()
   {

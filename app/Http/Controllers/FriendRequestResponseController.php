@@ -16,7 +16,10 @@ class FriendRequestResponseController extends Controller
         ]);
         // dd($data);
 
-        $friend_request = Friend::where('user_id', $data['user_id'])->where('friend_id', auth()->user()->id)->firstOrfail();
+        $friend_request = Friend::where('user_id', $data['user_id'])
+                                ->where('friend_id', auth()->user()->id)
+                                ->firstOrfail();
+                                
         $friend_request->update(array_merge($data, ['confirmed_at' => now()]));
 
         return new FriendResource($friend_request);
