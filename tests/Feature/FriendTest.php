@@ -170,4 +170,42 @@ class FriendTest extends TestCase
 
 
   }
+  /**
+   *  Created test for validation.
+   *    - created a response
+   *    - fetched the content of that response.
+   *    - Created ValidationErrorException.
+   *    - added the customize error response and added the meta and the correct error message by laravel.
+   *    - then create a render in Handler.php to automatically throw the customize ValidationErrorException.
+   */
+
+  public function test_friend_id_is_required_for_a_friend_request()
+  { 
+    // $this->withoutExceptionHandling();
+    $response = $this->actingAs($user = factory(User::class)->create(), 'api')
+                ->post('/api/friend-request', [
+                    'friend_id' => ''
+                ]);
+    
+    $responseString = json_decode($response->getContent(), true);
+
+    $this->assertArrayHasKey('friend_id', $responseString['errors']['meta']);
+  }
+
+  public function test_a_friend_request_reponse_must_have_an_id_and_status()
+  {
+    $user = factory(User::class)->create();
+
+    $response = $this->actingAs($user,'api')
+        ->post('/api/friend-request-response',[
+            'user_id' => '',
+            'status' => '',
+        ])
+        ->assertStatus(422);
+    
+    $responseString = json_decode($response->getContent(), true);   
+    $this->assertArrayHasKey('user_id', $responseString['errors']['meta']);
+    $this->assertArrayHasKey('status', $responseString['errors']['meta']);
+    
+  }
 }
