@@ -1,14 +1,21 @@
 const state = {
     user: null,
-    userStatus: false,
-    friendButtonText: null
+    userStatus: false
 };
 
 const getters = {
     user: state => state.user,
     userStatus: state => state.userStatus,
     friendship: state => state.user.data.attributes.friendship,
-    friendButtonText: state => state.friendButtonText
+    friendButtonText: (state, getters, rootState) => {
+        if (getters.friendship === null) {
+            return "Add friend";
+        } else if (getters.friendship.data.attributes.confirmed_at === null) {
+            return "Pending Friend Request";
+        }
+
+        state.friendButtonText;
+    }
 };
 
 const actions = {
@@ -19,7 +26,6 @@ const actions = {
             .then(res => {
                 commit("setUser", res.data);
                 commit("setUserStatus", "success");
-                dispatch("setFriendButton");
             })
             .catch(err => {
                 console.error(
@@ -35,7 +41,7 @@ const actions = {
         axios
             .post("/api/friend-request", { friend_id: friendId })
             .then(res => {
-                commit("setButtonText", "Pending Friend Request");
+                commit("setUserFriendship", res.data);
             })
             .catch(err => {
                 commit("setButtonText", "Add a friend");
@@ -44,20 +50,15 @@ const actions = {
                 );
                 commit("setUserStatus", "error");
             });
-    },
-
-    setFriendButton({ commit, getters }) {
-        if (getters.friendship === null) {
-            commit("setButtonText", "Add friend");
-        } else if (getters.friendship.data.attributes.confirmed_at === null) {
-            commit("setButtonText", "Pending Friend Request");
-        }
     }
 };
 
 const mutations = {
     setUser(state, user) {
         state.user = user;
+    },
+    setUserFriendship(state, friendship) {
+        state.user.data.attributes.friendship = friendship;
     },
     setUserStatus(state, status) {
         state.userStatus = status;

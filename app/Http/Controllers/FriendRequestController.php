@@ -24,9 +24,9 @@ class FriendRequestController extends Controller
          * This will check if there is duplicated row in the database.
          */
 
-        if(Friend::where('user_id', auth()->user()->id)->where('friend_id', $data['friend_id'])->first()) {
-           return false;
-        }
+        // if(Friend::where('user_id', auth()->user()->id)->where('friend_id', $data['friend_id'])->first()) {
+        //    return false;
+        // }
     
         /**
          * Steps
