@@ -55,7 +55,6 @@
                 </svg>
             </router-link>
             <router-link
-                v-if="!authUserStatus"
                 class="px-6 h-full border-b-2 border-white hover:border-blue-500 flex items-center"
                 :to="{
                     name: 'user.show',

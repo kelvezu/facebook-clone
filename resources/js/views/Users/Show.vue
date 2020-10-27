@@ -1,7 +1,6 @@
 <template>
 <div class="flex flex-col items-center">
-    <p v-if="userLoading">Loading post...</p>
-    <div v-else class="relative mb-8">
+    <div class="relative mb-8">
         <div class="w-full h-64 overflow-hidden z-10">
             <img src="https://www.nba.com/lakers/sites/lakers/files/1920_lal_mktg_finals_final_wallpaper_jd.jpg" alt="Cover photo" class="object-cover w-full">
         </div>
@@ -12,6 +11,12 @@
             </div>  
 
             <p class="text-2xl ml-4 text-gray-100 ml-4">{{ user.data.attributes.name }}</p>
+        </div>
+
+        <div class="absolute flex items-center bottom-0 right-0 mb-4 mr-12 z-20">
+            <button class="bg-blue-500 text-white font-semibold rounded p-1 text-xs focus:outline-none hover:bg-white hover:text-blue-500 border hover:border-blue-500">
+                Add friend
+            </button>
         </div>
     </div>
 
@@ -28,14 +33,13 @@
 
 <script>
 import Post from '../../components/Post';
+import {mapGetters} from 'vuex';
 
 export default {
     name: 'Show',
     data() {
         return {
-            user: null,
             posts:null,
-            userLoading: true,
             postLoading:true
         }
     },
@@ -43,16 +47,7 @@ export default {
         Post
     },
     mounted(){
-        axios.get(`/api/users/${this.$route.params.userId}`)
-            .then(res => {
-                this.user = res.data;
-            })
-            .catch(err => {
-                console.log(`Unable to fetch the user from the server. Error:${err}`);
-            })
-            .finally(() => {
-                this.userLoading = false;
-            });
+        this.$store.dispatch('fetchUser', this.$route.params.userId)
 
         axios.get(`/api/users/${this.$route.params.userId}/posts`)
             .then(res => {
@@ -64,6 +59,12 @@ export default {
             .finally(() => {
                 this.postLoading = false;
             });            
+    },
+    computed: {
+        ...mapGetters({
+            user: 'user',
+            userStatus: 'userStatus'
+        })
     }
 }
 </script>
