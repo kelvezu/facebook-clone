@@ -1,5 +1,5 @@
 <template>
-    <div class="flex flex-col flex-1 h-screen overflow-y-hidden">
+    <div v-if="authUser" class="flex flex-col flex-1 h-screen overflow-y-hidden">
         <Nav />
         <div class="flex overflow-y-hidden flex-1">
             <Sidebar />
@@ -13,7 +13,7 @@
 <script>
 import Nav from "./Nav";
 import Sidebar from "./Sidebar";
-import { mapActions } from "vuex";
+import { mapActions, mapGetters } from "vuex";
 
 export default {
     name: "App",
@@ -26,6 +26,11 @@ export default {
             'fetchAuthUser',
             'setPageTitle'
         ])
+    },
+    computed: {
+        ...mapGetters({
+            authUser: 'authUser'
+        }),
     },
     mounted() {
         this.fetchAuthUser();

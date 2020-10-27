@@ -15,11 +15,27 @@
 
         <div class="absolute flex items-center bottom-0 right-0 mb-4 mr-12 z-20">
             <button
-            v-if="friendButtonText" 
-            class="bg-blue-500 text-white font-semibold rounded p-1 text-xs focus:outline-none hover:bg-white hover:text-blue-500 border hover:border-blue-500"
-            @click="$store.dispatch('sendFriendRequest', $route.params.userId)" 
+                v-if="friendButtonText && friendButtonText !== 'Accept'" 
+                class="bg-blue-500 text-white font-semibold rounded p-1 text-xs focus:outline-none hover:bg-white hover:text-blue-500 border hover:border-blue-500"
+                @click="$store.dispatch('sendFriendRequest', $route.params.userId)" 
             >
                 {{ friendButtonText }}
+            </button>
+
+            <button
+                v-if="friendButtonText && friendButtonText === 'Accept'" 
+                class="mr-2 bg-blue-500 text-white font-semibold rounded p-1 text-xs focus:outline-none hover:bg-white hover:text-blue-500 border hover:border-blue-500"
+                @click="$store.dispatch('acceptFriendRequest', $route.params.userId)" 
+            >
+                 Accept
+            </button>
+
+            <button
+                v-if="friendButtonText && friendButtonText === 'Accept'" 
+                class="mr-2 bg-blue-500 text-white font-semibold rounded p-1 text-xs focus:outline-none hover:bg-white hover:text-blue-500 border hover:border-blue-500"
+                @click="$store.dispatch('ignoreFriendRequest', $route.params.userId)" 
+            >
+                 Ignore
             </button>
         </div>
     </div>
