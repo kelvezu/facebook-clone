@@ -14,8 +14,12 @@
         </div>
 
         <div class="absolute flex items-center bottom-0 right-0 mb-4 mr-12 z-20">
-            <button class="bg-blue-500 text-white font-semibold rounded p-1 text-xs focus:outline-none hover:bg-white hover:text-blue-500 border hover:border-blue-500">
-                Add friend
+            <button
+            v-if="friendButtonText" 
+            class="bg-blue-500 text-white font-semibold rounded p-1 text-xs focus:outline-none hover:bg-white hover:text-blue-500 border hover:border-blue-500"
+            @click="$store.dispatch('sendFriendRequest', $route.params.userId)" 
+            >
+                {{ friendButtonText }}
             </button>
         </div>
     </div>
@@ -63,7 +67,8 @@ export default {
     computed: {
         ...mapGetters({
             user: 'user',
-            userStatus: 'userStatus'
+            userStatus: 'userStatus',
+            friendButtonText: 'friendButtonText'
         })
     }
 }
