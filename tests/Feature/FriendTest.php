@@ -61,6 +61,7 @@ class FriendTest extends TestCase
     ]);
 
   }
+
   
   /**
    * This test will test if the user can accept the friend request.
@@ -345,6 +346,24 @@ class FriendTest extends TestCase
     $responseString = json_decode($response->getContent(), true);
 
     $this->assertArrayHasKey('user_id', $responseString['errors']['meta']);
+  }
+
+  public function test_check_if_there_are_multiple_records_of_request()
+  {
+    // $this->withoutExceptionHandling();
+    $this->actingAs($user = factory(user::class)->create(), 'api');
+    $another_user = factory(user::class)->create();
+    $friendRequest = factory(Friend::class)->create(['user_id' => $user->id , 'friend_id' => $another_user->id]);
+
+    $response = $this->post('/api/friend-request', [
+        'user_id' => $user->id,
+        'friend_id' => $another_user->id,
+        'status' => 1,
+        'confirmed_at' => now(),
+    ]);
+
+    $this->assertCount(1, Friend::all());
+
   }
 
 }
