@@ -276,4 +276,76 @@ class FriendTest extends TestCase
 
   }
 
+  public function test_friend_request_can_be_ignored()
+  {
+    $this->withoutExceptionHandling();
+
+    $this->actingAs($user = factory(User::class)->create(), 'api');
+    $another_user = factory(User::class)->create();
+
+    $this->post('/api/friend-request', [
+        'friend_id' => $another_user->id
+    ])
+    ->assertOk();
+
+    $response = $this->actingAs($another_user,'api')
+        ->delete('/api/friend-request-response/delete',[
+            'user_id' => $user->id,
+        ])
+        ->assertStatus(204);
+
+    $friendRequest = Friend::first();
+    $this->assertNull($friendRequest);
+    $response->assertNoContent();
+  }
+
+  public function test_only_the_recipient_can_ignore_the_friend_request()
+  {
+    // $this->withoutExceptionHandling();
+
+    $this->actingAs($user = factory(User::class)->create(), 'api');
+    $another_user = factory(User::class)->create();
+
+    $this->post('/api/friend-request', [
+        'friend_id' => $another_user->id
+    ])
+    ->assertOk();
+    
+    $friendRequest = Friend::first();
+
+    $this->assertNotNull($friendRequest);
+
+    $response = $this->actingAs(factory(User::class)->create(),'api')
+    ->delete('/api/friend-request-response/delete',[
+        'user_id' => $user->id,
+        'status' => 1,
+    ])
+    ->assertStatus(404);
+
+    $this->assertNull($friendRequest->confirmed_at);
+    $this->assertNull($friendRequest->status);
+    $response->assertJson([
+        'errors' => [
+            'code' => '404' ,
+            'title' => 'Friend request not found!',
+            'detail' => 'Unable to request the friend request with the given information.'
+        ]   
+    ]);
+  }
+
+  public function test_user_id_is_required_for_an_ignored_friend_resopnse()
+  { 
+    // $this->withoutExceptionHandling();
+    $response = $this->actingAs($user = factory(User::class)->create(), 'api')
+                ->delete('/api/friend-request-response/delete', [
+                    'user_id' => ''
+                ])
+                ->assertStatus(422);
+    
+    $responseString = json_decode($response->getContent(), true);
+
+    $this->assertArrayHasKey('user_id', $responseString['errors']['meta']);
+  }
+
 }
+ 
