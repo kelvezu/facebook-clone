@@ -2,6 +2,8 @@
 
 namespace App\Http\Resources;
 
+
+use App\Http\Resources\LikeCollection;
 use App\Http\Resources\User as UserResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -21,6 +23,7 @@ class Post extends JsonResource
                 'post_id' => $this->id,
                 'attributes' => [
                     'posted_by' => new UserResource($this->user),
+                    'likes' => new LikeCollection($this->likes),
                     'body' => $this->body,
                     'image' => $this->image,
                     'posted_at' => $this->created_at->diffForHumans(),
