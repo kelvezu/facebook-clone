@@ -1,17 +1,17 @@
 const state = {
     user: null,
     userStatus: false,
-    posts: null,
-    postStatus: null
+   
 };
 
 const getters = {
     user: state => state.user,
-    posts: state => state.posts,
+   
     status: state => {
       return {
         user: state.userStatus,
-        posts: state.postStatus, 
+        posts: state.postsStatus
+      
       }
     },
     userStatus: state => state.userStatus,
@@ -50,21 +50,6 @@ const actions = {
                     `Unable to fetch the user from the server. Error:${err}`
                 );
                 commit("setUserStatus", "error");
-            });
-    },
-
-    fetchUserPosts({ commit }, userId) {
-        commit("setPostStatus", "Loading...");
-        axios
-            .get(`/api/users/${userId}/posts`)
-            .then(res => {
-                commit("setPosts", res.data);
-                commit("setPostStatus", "success");
-            })
-            .catch(err => {
-                console.log(
-                    `Unable to fetch the user's posts from the server. Error:${err}`
-                );
             });
     },
 
@@ -122,18 +107,12 @@ const mutations = {
     setUser(state, user) {
         state.user = user;
     },
-    setPosts(state, posts) {
-        state.posts = posts;
-    },
     setUserFriendship(state, friendship) {
         state.user.data.attributes.friendship = friendship;
     },
     setUserStatus(state, status) {
         state.userStatus = status;
     },
-    setPostStatus(state, status) {
-        state.postStatus = status;
-    }
 };
 
 export default {

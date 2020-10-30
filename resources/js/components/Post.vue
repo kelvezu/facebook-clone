@@ -131,7 +131,7 @@
                     type="text"
                     name="comment"
                     class="w-full h-8 bg-gray-200 rounded-full pl-4 focus:outline-none"
-                    placeholder="Enter a your comment here."
+                    placeholder="Write a comment."
                 />
                 <button
                     v-if="commentBody"

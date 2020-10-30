@@ -1,14 +1,14 @@
 const state = {
-    newsPosts: null,
-    newsPostStatus: null,
+    posts: null,
+    postsStatus: null,
     postMessage: null
 };
 
 const getters = {
-    newsPosts: state => state.newsPosts,
+    posts: state => state.posts,
     newsStatus: state => {
         return {
-            newsPostStatus: state.newsPostStatus
+            postsStatus: state.postsStatus
         };
     },
     postMessage: state => state.postMessage
@@ -16,60 +16,85 @@ const getters = {
 
 const actions = {
     fetchNewsPosts({ commit }) {
-        commit("setPostStatus", "loading");
+        commit("setPostsStatus", "loading");
         axios
             .get("/api/posts")
             .then(res => {
                 commit("setPosts", res.data);
-                commit("setPostStatus", "success");
+                commit("setPostsStatus", "success");
             })
             .catch(err => console.log(err));
     },
-    submitPostMessage({ commit,state }) {
-        commit("setPostStatus", "loading");
+    fetchUserPosts({ commit }, userId) {
+        commit("setPostsStatus", "Loading...");
         axios
-            .post("/api/posts" , {body: state.postMessage})
+            .get(`/api/users/${userId}/posts`)
+            .then(res => {
+                commit("setPosts", res.data);
+                commit("setPostsStatus", "success");
+            })
+            .catch(err => {
+                console.log(
+                    `Unable to fetch the user's posts from the server. Error:${err}`
+                );
+            });
+    },
+    submitPostMessage({ commit, state }) {
+        commit("setPostsStatus", "loading");
+        axios
+            .post("/api/posts", { body: state.postMessage })
             .then(res => {
                 commit("pushPost", res.data);
                 commit("updateMessage", "");
-                commit("setPostStatus", "success");
+                commit("setPostsStatus", "success");
             })
-            .catch(err => console.error(`Error in submitting post message. Error: ${err}`));
+            .catch(err =>
+                console.error(`Error in submitting post message. Error: ${err}`)
+            );
     },
-    likePost({commit}, data) {
-        axios.post(`/api/posts/${data.postId}/like`)
-            .then( res => {
-                commit('pushLikes', {likes: res.data, postKey: data.postKey});
+    likePost({ commit }, data) {
+        axios
+            .post(`/api/posts/${data.postId}/like`)
+            .then(res => {
+                commit("pushLikes", { likes: res.data, postKey: data.postKey });
             })
-            .catch(err => console.error(`Failed to liked the post. Error:${err}`))
+            .catch(err =>
+                console.error(`Failed to liked the post. Error:${err}`)
+            );
     },
-    commentPost({commit}, data) {
-        axios.post(`/api/posts/${data.postId}/comment`, { body: data.body })
-        .then( res => {
-            commit('pushComments', {comments: res.data, postKey: data.postKey});
-        })
-        .catch(err => console.error(`Failed to liked the post. Error:${err}`))
+    commentPost({ commit }, data) {
+        axios
+            .post(`/api/posts/${data.postId}/comment`, { body: data.body })
+            .then(res => {
+                commit("pushComments", {
+                    comments: res.data,
+                    postKey: data.postKey
+                });
+            })
+            .catch(err =>
+                console.error(`Failed to liked the post. Error:${err}`)
+            );
     }
 };
 
 const mutations = {
     setPosts(state, posts) {
-        state.newsPosts = posts;
+        state.posts = posts;
     },
-    setPostStatus(state, status) {
-        state.newsPostStatus = status;
+    setPostsStatus(state, status) {
+        state.postsStatus = status;
     },
     updateMessage(state, message) {
         state.postMessage = message;
     },
     pushPost(state, post) {
-        state.newsPosts.data.unshift(post);
+        state.posts.data.unshift(post);
     },
     pushLikes(state, data) {
-        state.newsPosts.data[data.postKey].data.attributes.likes = data.likes;
+        state.posts.data[data.postKey].data.attributes.likes = data.likes;
     },
     pushComments(state, data) {
-        state.newsPosts.data[data.postKey].data.attributes.comments = data.comments;
+        state.posts.data[data.postKey].data.attributes.comments = data.comments;
     }
 };
 
