@@ -42,6 +42,13 @@ const actions = {
                 commit('pushLikes', {likes: res.data, postKey: data.postKey});
             })
             .catch(err => console.error(`Failed to liked the post. Error:${err}`))
+    },
+    commentPost({commit}, data) {
+        axios.post(`/api/posts/${data.postId}/comment`, { body: data.body })
+        .then( res => {
+            commit('pushComments', {comments: res.data, postKey: data.postKey});
+        })
+        .catch(err => console.error(`Failed to liked the post. Error:${err}`))
     }
 };
 
@@ -60,6 +67,9 @@ const mutations = {
     },
     pushLikes(state, data) {
         state.newsPosts.data[data.postKey].data.attributes.likes = data.likes;
+    },
+    pushComments(state, data) {
+        state.newsPosts.data[data.postKey].data.attributes.comments = data.comments;
     }
 };
 
