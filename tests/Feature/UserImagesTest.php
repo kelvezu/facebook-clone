@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\User;
+use App\UserImage;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Http\UploadedFile;
@@ -57,5 +58,53 @@ class UserImagesTest extends TestCase
                 'self' => url('/users/'.$user->id)
             ]
        ]);
+   }
+
+   public function test_users_are_returned_with_images()
+   {
+        $this->withoutExceptionHandling();
+        $this->actingAs($user = factory(User::class)->create(), 'api');
+        $file = UploadedFile::fake()->image('user-image.jpg');
+        $this->post('/api/user-images', [
+            'image' => $file,
+            'width' => 850,
+            'height' => 300,
+            'location' => 'cover',
+        ])->assertStatus(201);
+
+        $this->post('/api/user-images', [
+            'image' => $file,
+            'width' => 850,
+            'height' => 300,
+            'location' => 'profile',
+        ])->assertStatus(201);
+
+        $response = $this->get('/api/users/'.$user->id);
+
+        // $userImage = UserImage::first();
+        $response->assertJson([
+            'data' => [
+                'type' => 'users',
+                'user_id' => $user->id,
+                  'attributes' => [
+                      'name' => $user->name,
+                      'cover_image' => [
+                            'data' => [
+                                'type' => 'user-images',
+                                'user_image_id' => 1,
+                                'attributes' => []
+                            ],
+                        ],
+                    'profile_image' => [
+                        'data' => [
+                            'type' => 'user-images',
+                            'user_image_id' => 2,
+                            'attributes' => []
+                            ],
+                        ]
+
+                  ]
+                ],
+        ]);
    }
 }
