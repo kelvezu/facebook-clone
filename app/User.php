@@ -50,6 +50,10 @@ class User extends Authenticatable
         return $this->belongsToMany(User::class, 'friends', 'friend_id', 'user_id');
     }
 
+    public function images() {
+        return $this->hasMany(UserImage::class);
+    }
+
      public function likedPosts()
      {
          return $this->belongsToMany(Post::class, 'likes', 'user_id' , 'post_id');
