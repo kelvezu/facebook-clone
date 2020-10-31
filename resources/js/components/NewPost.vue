@@ -2,7 +2,11 @@
     <div class="bg-white rounded shadow w-2/3 p-4">
        <div class="flex justify-between items-center">
             <div class="w-8">
-                <img class="w-8 h-8 object-cover rounded-full" src="https://world-celebs.com/public/media/celebrity/2019/07/13/0hoybydh3lax-joji-filthy-frank.jpg" alt="profile pic">
+                <img 
+                    class="w-8 h-8 object-cover rounded-full" 
+                    :src="authUser.data.attributes.profile_image.data.attributes.path" 
+                    alt="profile pic"
+                />
             </div>
 
             <div class="flex-1 flex mx-2">
@@ -26,10 +30,15 @@
 
 <script>
 import _ from 'lodash';
+import { mapGetters } from 'vuex';
+
 
 export default {
     name: "NewPost",
     computed: {
+        ...mapGetters({
+            authUser: 'authUser',
+        }),
         postMessage: {
             get() {
                 return this.$store.getters.postMessage;

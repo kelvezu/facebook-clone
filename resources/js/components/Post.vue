@@ -5,8 +5,8 @@
                 <div>
                     <img
                         class="w-8 h-8 object-cover rounded-full"
-                        src="https://world-celebs.com/public/media/celebrity/2019/07/13/0hoybydh3lax-joji-filthy-frank.jpg"
-                        alt="profile pic"
+                        :src="post.data.attributes.posted_by.data.attributes.profile_image.data.attributes.path"
+                        :alt="'profile pic'"
                     />
                 </div>
                 <div class="ml-2">
@@ -151,7 +151,7 @@
                 <div>
                     <img
                         class="w-8 h-8 object-cover rounded-full"
-                        src="https://world-celebs.com/public/media/celebrity/2019/07/13/0hoybydh3lax-joji-filthy-frank.jpg"
+                        :src="comment.data.attributes.commented_by.data.attributes.profile_image.data.attributes.path"
                         alt="profile pic"
                     />
                 </div>
@@ -186,7 +186,8 @@ export default {
             showComment: false,
             commentBody: null
         };
-    }
+    },
+   
 };
 </script>
 

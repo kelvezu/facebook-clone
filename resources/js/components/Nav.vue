@@ -63,7 +63,7 @@
             >
                 <img
                     class="w-8 h-8 object-cover rounded-full"
-                    src="https://world-celebs.com/public/media/celebrity/2019/07/13/0hoybydh3lax-joji-filthy-frank.jpg"
+                    :src="authUser.data.attributes.profile_image.data.attributes.path"
                     alt="profile pic"
                 />
             </router-link>

@@ -4,11 +4,11 @@
         <div class="w-full h-64 overflow-hidden z-10">
            <UploadableImage 
             :user-image="user.data.attributes.cover_image"
-           image-width="1500" 
-           image-height="300" 
-           location="cover"
-           :classes="'object-cover w-full'"
-           :alt="'Cover photo'"
+            image-width="1500" 
+            image-height="300" 
+            location="cover"
+            :classes="'object-cover w-full'"
+            :alt="'Cover photo'"
            />
         </div>
 
