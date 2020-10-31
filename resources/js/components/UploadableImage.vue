@@ -1,10 +1,10 @@
 <template>
     <div>
         <img
-            src="https://www.nba.com/lakers/sites/lakers/files/1920_lal_mktg_finals_final_wallpaper_jd.jpg"
-            alt="Cover photo"
+            :src="imageObject.data.attributes.path"
+            :alt="alt"
             ref="userImage" 
-            class="object-cover w-full"
+            :class="classes"
         />
     </div>
 </template>
@@ -16,14 +16,18 @@ export default {
     name: "UploadableImage",
     data: () => {
         return {
-            dropzone: null
+            dropzone: null,
+            uploadedImage: null,
         };
     },
 
     props: [
+        'userImage',
         'imageWidth',
         'imageHeight',
-        'location'
+        'location',
+        'classes',
+        'alt'
     ],
 
     mounted() {
@@ -45,9 +49,13 @@ export default {
                     'X-CSRF-TOKEN': document.head.querySelector('meta[name=csrf-token]').content,
                 },
                 success: (e,res) => {
-                    alert('Uploaded');
+                    this.uploadedImage = res;
                 }
             };
+        },
+
+        imageObject() {
+           return this.uploadedImage || this.userImage 
         }
     },
 };

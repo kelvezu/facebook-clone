@@ -2,12 +2,26 @@
 <div class="flex flex-col items-center" v-if="status.user === 'success' && user">
     <div class="relative mb-8">
         <div class="w-full h-64 overflow-hidden z-10">
-           <UploadableImage image-width="1500" image-height="300" location="cover" />
+           <UploadableImage 
+            :user-image="user.data.attributes.cover_image"
+           image-width="1500" 
+           image-height="300" 
+           location="cover"
+           :classes="'object-cover w-full'"
+           :alt="'Cover photo'"
+           />
         </div>
 
         <div class="absolute flex items-center bottom-0 left-0 -mb-8 ml-12 z-20">
             <div class="w-32">
-                 <img class="w-32 h-32 border-4 border-gray-200 rounded-full shadow-lg object-cover rounded-full" src="https://world-celebs.com/public/media/celebrity/2019/07/13/0hoybydh3lax-joji-filthy-frank.jpg" alt="profile pic">
+                <UploadableImage 
+                    :user-image="user.data.attributes.profile_image"
+                    image-width="1500" 
+                    image-height="300" 
+                    location="profile"
+                    :classes="'w-32 h-32 border-4 border-gray-200 rounded-full shadow-lg object-cover rounded-full'"
+                    :alt="'Profile photo'"
+                />
             </div>  
 
             <p class="text-2xl ml-4 text-gray-100 ml-4">{{ user.data.attributes.name }}</p>
