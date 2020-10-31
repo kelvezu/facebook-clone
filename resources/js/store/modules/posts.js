@@ -26,7 +26,7 @@ const actions = {
             .catch(err => console.log(err));
     },
     fetchUserPosts({ commit }, userId) {
-        commit("setPostsStatus", "Loading...");
+        commit("setPostsStatus", "loading");
         axios
             .get(`/api/users/${userId}/posts`)
             .then(res => {

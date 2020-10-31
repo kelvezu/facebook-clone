@@ -3,12 +3,12 @@
     <div class="relative mb-8">
         <div class="w-full h-64 overflow-hidden z-10">
            <UploadableImage 
-            :user-image="user.data.attributes.cover_image"
-            image-width="1500" 
-            image-height="300" 
-            location="cover"
-            :classes="'object-cover w-full'"
-            :alt="'Cover photo'"
+                :user-image="user.data.attributes.cover_image"
+                image-width="1200" 
+                image-height="500" 
+                location="cover"
+                :classes="'object-cover w-full'"
+                :alt="'Cover photo'"
            />
         </div>
 
@@ -16,8 +16,8 @@
             <div class="w-32">
                 <UploadableImage 
                     :user-image="user.data.attributes.profile_image"
-                    image-width="1500" 
-                    image-height="300" 
+                    image-width="750" 
+                    image-height="750" 
                     location="profile"
                     :classes="'w-32 h-32 border-4 border-gray-200 rounded-full shadow-lg object-cover rounded-full'"
                     :alt="'Profile photo'"
