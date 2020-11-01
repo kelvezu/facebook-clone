@@ -41,8 +41,8 @@
             </div>
         </div>
 
-        <div v-if="post.data.attributes.image" class="w-full">
-            <img class="w-full" :src="post.data.attributes.image" />
+        <div v-if="post.data.attributes.image.length > 1" class="w-full">
+            <img class="w-full" :src="post.data.attributes.image" alt="post image" />
         </div>
 
         <div class="px-4 pt-2 flex justify-between">
