@@ -54,13 +54,13 @@
         </div>
     </div>
 
-    <div v-if="status.posts === 'Loading...' ">Loading post...</div>
+    <div v-if="newsStatus === 'loading'">Loading post...</div>
 
-    <div v-else-if="posts.length < 1">
+    <Post v-else-if="newsStatus === 'success'" v-for="(post, postKey) in posts.data" :key="postKey" :post="post" />
+
+     <div v-else>
         No posts found! Get started.
     </div>
-
-     <Post v-else v-for="(post, postKey) in posts.data" :key="postKey" :post="post" />
 
 </div>
 </template>
@@ -83,7 +83,7 @@ export default {
     computed: {
         ...mapGetters({
             user: 'user',
-            posts: 'posts',
+            newsStatus: 'newsStatus',
             status: 'status',
             friendButtonText: 'friendButtonText'
         })
